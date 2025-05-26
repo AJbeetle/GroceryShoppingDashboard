@@ -17,7 +17,7 @@ export default {
           like : "#E86F6F",   
           notify : "#ff7979"   // 50% opacity
         },
-        ornage : {
+        orange : {
           base : "#ff9446",   // 50% opacity
         },
         green : {
