@@ -52,16 +52,62 @@ const trendingItemSelector = selector({
     }
 })
 
+
+// Creating Separate atoms : making more backend API calls, will be useful if databsse is very heavy and lazy loading is required or data is paginated and when we donot have shared abse data. 
+/* const fruitAtom = atom ({
+    key : "fruitsDetails",
+    default : selector({
+        key : "fruitsDetailSelector",
+        get : async function({get}){
+            const res = await axios.get(`${BASE_URL}/?category=fruit`);
+            return res.data;
+        }
+    })
+})
+
+const drinksAtom = atom ({
+    key : "drinksDetails",
+    default : selector({
+        key : "drinksDetailSelector",
+        get : async function({get}){
+            const res = await axios.get(`${BASE_URL}/?category=drinks`);
+            return res.data;
+        }
+    })
+})
+
+
+const bakeryAtom = atom ({
+    key : "fruitsDetails",
+    default : selector({
+        key : "fruitsDetailSelector",
+        get : async function({get}){
+            const res = await axios.get(`${BASE_URL}/?category=bakery`);
+            return res.data;
+        }
+    })
+}) */
+
+
+
+
+// The fruit, drinks and bakery items can be extracted using selectors too
+
 const fruitSelector = selector({
     key : "fruitSelector",
     get : function({get}){
-
+        const allItem:apiItems[]  = get(allItemAtom);
+        const fruits:apiItems[] = allItem.filter(el => el.type==="fruit");
+        return fruits;
     }
 })
 
 const bakerySelector = selector({
     key : "bakeryItems",
     get : function({get}){
+        const allItem:apiItems[]  = get(allItemAtom);
+        const bakery:apiItems[] = allItem.filter(el => el.type==="bakery");
+        return bakery;
 
     }
 })
@@ -69,11 +115,21 @@ const bakerySelector = selector({
 const drinkSelector = selector({
     key : "drinkItems",
     get : function({get}){
-
+        const allItem:apiItems[]  = get(allItemAtom);
+        const drinks:apiItems[] = allItem.filter(el => el.type==="drinks");
+        return drinks;   
     }
 })
 
 
 export {
-    allItemAtom, cardItemsSelector, fruitSelector, bakerySelector, drinkSelector, trendingItemSelector
+    allItemAtom, 
+    cardItemsSelector, 
+    fruitSelector, 
+    bakerySelector, 
+    drinkSelector, 
+    trendingItemSelector,
+    // bakeryAtom,
+    // fruitAtom,
+    // drinksAtom
 }
