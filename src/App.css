@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Not needed here as already set in index.css */
+/* styles.css or index.css */
+/* body {
+  font-family: 'Almarai', sans-serif;
+} */
