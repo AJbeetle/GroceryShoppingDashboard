@@ -11,25 +11,43 @@ function DesignSheet(){
     const drinks:apiItems[] = useRecoilValue(drinkSelector);
     const bakery:apiItems[] = useRecoilValue(bakerySelector);
 
+    const Likes = localStorage.getItem("Like")
+    const LikeObject = JSON.parse(Likes as string);
+    const LikeObjKeys = Object.keys(LikeObject);
+
+    const Inventory = localStorage.getItem("Inventory");
+    const InvObj = JSON.parse(Inventory as string);
+    const InvObjKeys = Object.keys(InvObj);
+    
+    
+
     return (
-        <div>
-            <div className="allItems">
-                <p>
-                    All IEMS 
-                </p>
+        <div className="flex flex-wrap flex-col">
+            <p className="text-xl font-bold m-10">
+                    All ITEMS 
+            </p>
+            <div className="allItems flex flex-wrap">
                 {
                     items.map((el:cardItems,i:number) => {
-                        return (
-                            <ItemCard item={el} key={i}></ItemCard>
-                        )
+                        if(LikeObject[`${el.name}`]===true){
+                            return (
+                                <ItemCard item={el} likeState={true} key={i} userSessionItemAvailable={InvObj[`${el.name}`]}></ItemCard>
+                            )
+                        }
+                        else{
+                            return (
+                                <ItemCard item={el} likeState={false} key={i} userSessionItemAvailable={InvObj[`${el.name}`]}></ItemCard>
+                            )
+                        }
+
+                        
                     })
                 }
             </div>
-
-            <div className="trendyItems">
-                <p>
-                    Trendy Items
-                </p>
+            {/* <p className="text-xl font-bold m-10">
+                    TRENDY ITEMS 
+            </p>
+            <div className="trendyItems flex flex-wrap">
                 {
                     trendy.map((el:apiItems,i:number)=>{
                         return (
@@ -38,11 +56,10 @@ function DesignSheet(){
                     })
                 }
             </div>
-
-            <div className="Fruits">
-                <p>
-                    FRUITS 
-                </p>
+            <p className="text-xl font-bold m-10">
+                    FRUTIS 
+            </p>
+            <div className="Fruits flex flex-wrap">
                 {
                     fruits.map((el:apiItems,i:number)=>{
                         return (
@@ -51,11 +68,10 @@ function DesignSheet(){
                     })
                 }
             </div>
-
-            <div className="Drinks">
-                <p>
+            <p className="text-xl font-bold m-10">
                     DRINKS
-                </p>
+            </p>
+            <div className="Drinks flex flex-wrap">
                 {
                     drinks.map((el:apiItems,i:number)=>{
                         return (
@@ -64,10 +80,10 @@ function DesignSheet(){
                     })
                 }
             </div>
-            <div className="Bakery">
-                <p>
+            <p className="text-xl font-bold m-10">
                     BAKERY
-                </p>
+            </p>
+            <div className="Bakery flex flex-wrap">
                 {
                     bakery.map((el:apiItems,i:number)=>{
                         return (
@@ -75,7 +91,7 @@ function DesignSheet(){
                         )
                     })
                 }
-            </div>
+            </div> */}
         </div>
     )
 }
