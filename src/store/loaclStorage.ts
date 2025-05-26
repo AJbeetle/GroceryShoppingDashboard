@@ -1,8 +1,15 @@
-const Like = {
+const Like:Record<string, boolean> = {
+    "Coca-Cola" : true,
+    "Bananas" : true
 }
 
 const Cart = {
 }
+
+const Inventory:Record<string, number> = {
+
+}
+
 
 const Offers = {
     "Coca-Cola" : {
@@ -23,5 +30,5 @@ const Offers = {
 
 
 export {
-    Like, Cart, Offers
+    Like, Cart, Offers, Inventory
 }
