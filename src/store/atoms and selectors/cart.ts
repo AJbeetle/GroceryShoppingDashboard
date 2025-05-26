@@ -1,8 +1,10 @@
 import {atom, selector} from "recoil"
 
+const cart = JSON.parse(localStorage.getItem("Cart") as string);
+
 const cartCount = atom({
     key : "countOfTotalItemsInCart",
-    default : 0
+    default : cart.count
 })
 
 export {

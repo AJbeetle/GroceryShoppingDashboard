@@ -4,8 +4,6 @@ import CartIcon from "../icons/cart"
 import LikeIcon from "../icons/like"
 import {useState, useRef} from "react";
 
-import {useRecoilValue, useSetRecoilState} from "recoil"
-import { cartCount } from "../../store/atoms and selectors/cart";
 
 function ItemCard({item, likeState, userSessionItemAvailable} : {
     item : cardItems,
@@ -13,6 +11,7 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
     userSessionItemAvailable:number
 }){
     const [stateOfLike, setStateOfLike] = useState(likeState); // this is used just to make re-render in the page so that like button gets colored to red
+    const [itemAvailability, setItemAvailability] = useState(userSessionItemAvailable);
     const dialogBox = useRef(null);
 
     function toggleLike(){
@@ -25,6 +24,31 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
     
     function addtoCart(){
         const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
+        if(cartObj.items[item.name]){
+            alert("you already added this in cart, inc quantity in cart screen")
+            return;
+        }
+        else{
+            if(cartObj.items[item.name] == null || cartObj.items[item.name] ==  undefined){
+                cartObj.items[item.name] = 1;
+                cartObj.count++;
+                localStorage.setItem("Cart",JSON.stringify(cartObj));
+            } 
+            else{
+                cartObj.items[item.name]++;
+                cartObj.count++;
+                localStorage.setItem("Cart",JSON.stringify(cartObj));
+            }
+        }
+
+        const invObj = JSON.parse(localStorage.getItem("Inventory") as string);
+        invObj[`${item.name}`] = invObj[`${item.name}`] - 1 ;
+        localStorage.setItem("Inventory",JSON.stringify(invObj));
+        
+
+        setItemAvailability(t => t-1);
+
+        // const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
         // likeObj[`${item.name}`] = !likeObj[`${item.name}`];
     }
 
@@ -46,9 +70,10 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                 <div className="w-full">
                     <div className="w-full text-sm mb-10 ">
                         {
-                            userSessionItemAvailable >=10 ? 
-                            <div className="border border-solid border-green-base rounded-lg py-1 px-4 w-[50%] bg-green-base text-white-default flex justify-center opacity-50">Available</div> : 
-                            <div className="border border-solid border-orange-base rounded-lg py-1 px-4 w-[50%] bg-orange-base text-white-default flex justify-center opacity-50"> Only {userSessionItemAvailable} Left</div>
+                            itemAvailability >=10 ? 
+                            <div className="border border-solid border-green-base rounded-lg py-1 px-4 w-[50%] bg-green-base text-white-default flex justify-center opacity-50">Available</div> : itemAvailability == 0 ? 
+                            <div className="border border-solid border-orange-base rounded-lg py-1 px-4 w-[50%] bg-orange-base text-white-default flex justify-center opacity-50">Out Of Stock</div> :
+                            <div className="border border-solid border-orange-base rounded-lg py-1 px-4 w-[50%] bg-orange-base text-white-default flex justify-center opacity-50"> Only {itemAvailability} Left</div>
                         }
                     </div>
                     <div className="flex justify-between w-full items-center">
@@ -56,7 +81,7 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                             {item.price}
                         </div>
                         <div className="flex justify-center items-center gap-4">
-                            <button className="" onClick={()=>addtoCart()} >
+                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" disabled={itemAvailability==0?true:false} onClick={()=>addtoCart()} >
                                 <CartIcon/>
                             </button>
                             <button className="" onClick={()=>toggleLike()}>

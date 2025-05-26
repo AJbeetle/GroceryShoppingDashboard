@@ -13,11 +13,11 @@ function DesignSheet(){
 
     const Likes = localStorage.getItem("Like")
     const LikeObject = JSON.parse(Likes as string);
-    const LikeObjKeys = Object.keys(LikeObject);
+    // const LikeObjKeys = Object.keys(LikeObject);
 
     const Inventory = localStorage.getItem("Inventory");
     const InvObj = JSON.parse(Inventory as string);
-    const InvObjKeys = Object.keys(InvObj);
+    // const InvObjKeys = Object.keys(InvObj);
     
     
 
