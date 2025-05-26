@@ -4,6 +4,10 @@ const Like:Record<string, boolean> = {
 }
 
 const Cart = {
+    "count" : 0,
+    "items" : {
+        
+    }
 }
 
 const Inventory:Record<string, number> = {
