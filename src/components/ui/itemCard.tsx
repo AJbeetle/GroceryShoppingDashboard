@@ -19,7 +19,7 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
 
     function toggleLike(){
         const likeObj = JSON.parse(localStorage.getItem("Like") as string);
-        likeObj[`${item.name}`] = !likeObj[`${item.name}`];
+        likeObj.items[`${item.name}`] = !likeObj.items[`${item.name}`];
         localStorage.setItem("Like",JSON.stringify(likeObj));
         setStateOfLike(t => !t);
     }
@@ -89,7 +89,7 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                         </div>
                         <div className="flex justify-center items-center gap-4">
                             <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" disabled={itemAvailability==0?true:false} onClick={()=>addtoCart()} >
-                                <CartIcon/>
+                                <CartIcon fill={false}/>
                             </button>
                             <button className="" onClick={()=>toggleLike()}>
                                  <LikeIcon style="text-3xl" state={stateOfLike}/>
