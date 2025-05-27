@@ -5,47 +5,102 @@ import LikeIcon from "../icons/like"
 import {useState, useRef} from "react";
 import {useSetRecoilState} from "recoil"
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
+import { likedCountAtom } from "../../store/atoms and selectors/like";
 
 
-function ItemCard({item, likeState, userSessionItemAvailable} : {
-    item : cardItems,
+function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtraRender} : {
+    item : cardItems | apiItems,
     likeState:boolean,
-    userSessionItemAvailable:number
+    userSessionItemAvailable:number,
+    cartState:boolean, 
+    setExtraRender?: React.Dispatch<React.SetStateAction<boolean>>
 }){
     const [stateOfLike, setStateOfLike] = useState(likeState); // this is used just to make re-render in the page so that like button gets colored to red
+    const [stateOfCart, setStateOfCart] = useState(cartState);
     const [itemAvailability, setItemAvailability] = useState(userSessionItemAvailable);
-    const dialogBox = useRef(null);
     const setCartCount = useSetRecoilState(cartCountAtom);
+    const setLikeCount = useSetRecoilState(likedCountAtom);
 
     function toggleLike(){
+        
         const likeObj = JSON.parse(localStorage.getItem("Like") as string);
+        const setVal = !likeObj.items[`${item.name}`];
         likeObj.items[`${item.name}`] = !likeObj.items[`${item.name}`];
         localStorage.setItem("Like",JSON.stringify(likeObj));
+        
+        // basically we will update the stateofLike later first we do the dom manipulation 
+        if(stateOfLike === false){
+            // it means if earlier state was false then now currently we are liking it so, inc like count by 1
+            if(setVal){
+                likeObj["count"] = likeObj["count"]+1;
+                localStorage.setItem("Like",JSON.stringify(likeObj));
+            }
+            //@ts-ignore
+            setLikeCount(t=>t+1);
+            if(setExtraRender){
+                setExtraRender(t=>!t)
+            }
+            
+        }
+        else if(stateOfLike === true){
+            // it means if earlier state was true then now currently we are unliking it so, dec like count by 1
+            if(!setVal){
+                likeObj["count"] = likeObj["count"]-1;
+                localStorage.setItem("Like",JSON.stringify(likeObj));
+            }
+            //@ts-ignore
+            setLikeCount(t=>t-1);
+            if(setExtraRender){
+                setExtraRender(t=>!t)
+            }
+        }
+
         setStateOfLike(t => !t);
+
+        // setLikeAtom(JSON.parse(localStorage.getItem("Like") as string)["items"])
     }
 
-    
+    // This below addtoCart function had redundant code
+    // function addtoCart(){
+    //     const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
+    //     if(cartObj.items[item.name]){
+    //         alert("you already added this in cart, inc quantity in cart screen")
+    //         return;
+    //     }
+    //     else{
+    //         if(cartObj.items[item.name] == null || cartObj.items[item.name] ==  undefined){
+    //             cartObj.items[item.name] = 1;
+    //             cartObj.count++;
+    //             localStorage.setItem("Cart",JSON.stringify(cartObj));
+    //             //@ts-ignore
+    //             setCartCount(t=>t+1);
+    //         } 
+    //         else{
+    //             cartObj.items[item.name]++;
+    //             cartObj.count++;
+    //             localStorage.setItem("Cart",JSON.stringify(cartObj));
+    //             //@ts-ignore
+    //             setCartCount(t=>t+1);
+    //         }
+    //     }
+
+
     function addtoCart(){
         const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
         if(cartObj.items[item.name]){
-            alert("you already added this in cart, inc quantity in cart screen")
+            alert("you already added this in cart,\n\nIf you wanna add more quantity or delete this item from cart then GO TO CART.")
             return;
         }
         else{
-            if(cartObj.items[item.name] == null || cartObj.items[item.name] ==  undefined){
-                cartObj.items[item.name] = 1;
-                cartObj.count++;
-                localStorage.setItem("Cart",JSON.stringify(cartObj));
-                //@ts-ignore
-                setCartCount(t=>t+1);
-            } 
-            else{
-                cartObj.items[item.name]++;
-                cartObj.count++;
-                localStorage.setItem("Cart",JSON.stringify(cartObj));
-                //@ts-ignore
-                setCartCount(t=>t+1);
+            cartObj.items[item.name] = 1;
+            cartObj.count++;
+            localStorage.setItem("Cart",JSON.stringify(cartObj));
+            //@ts-ignore
+            setCartCount(t=>t+1);
+            if(setExtraRender){
+                 setExtraRender(t=>!t)
             }
+            setStateOfCart(t=>!t);
         }
 
         const invObj = JSON.parse(localStorage.getItem("Inventory") as string);
@@ -58,6 +113,8 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
         // const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
         // likeObj[`${item.name}`] = !likeObj[`${item.name}`];
     }
+
+    
 
     return (
         <div className="flex bg-white-default m-2 w-[500px] h-[300px] shadow-xl rounded-3xl jusitfy-center items-start">
@@ -89,21 +146,14 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                         </div>
                         <div className="flex justify-center items-center gap-4">
                             <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" disabled={itemAvailability==0?true:false} onClick={()=>addtoCart()} >
-                                <CartIcon fill={false}/>
+                                <CartIcon fill={stateOfCart} style={`w-[28px] h-[27px]`}/>
                             </button>
                             <button className="" onClick={()=>toggleLike()}>
                                  <LikeIcon style="text-3xl" state={stateOfLike}/>
                             </button>
                         </div>
-
                     </div>
                 </div>
-
-                <dialog ref={dialogBox}>
-                    <div>
-                        This is add to cart dialog box
-                    </div>
-                </dialog>
                 
             </div>
         </div>
