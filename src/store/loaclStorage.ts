@@ -1,5 +1,5 @@
 const Like:Record<string,number|Record<string, boolean>> = {
-    "count" : 0,
+    "count" : 2,
     "items" : {
         "Coca-Cola" : true,
         "Bananas" : true
