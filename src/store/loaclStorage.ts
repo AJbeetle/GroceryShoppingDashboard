@@ -1,12 +1,15 @@
-const Like:Record<string, boolean> = {
-    "Coca-Cola" : true,
-    "Bananas" : true
+const Like:Record<string,number|Record<string, boolean>> = {
+    "count" : 0,
+    "items" : {
+        "Coca-Cola" : true,
+        "Bananas" : true
+    }
 }
 
 const Cart = {
     "count" : 0,
     "items" : {
-        
+
     }
 }
 
