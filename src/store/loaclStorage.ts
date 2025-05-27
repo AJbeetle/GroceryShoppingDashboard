@@ -1,4 +1,19 @@
-const Like:Record<string,number|Record<string, boolean>> = {
+export type LikeObjType = {
+    count : number,
+    items : Record<string, boolean>
+}
+
+export type CartObjType = {
+    count : number,
+    items : Record<string, number>
+}
+
+export type InvObjType = Record<string, number>
+
+// type OffersType = 
+
+// const Like:Record<string,number|Record<string, boolean>> = {
+const Like:LikeObjType = {
     "count" : 2,
     "items" : {
         "Coca-Cola" : true,
@@ -6,14 +21,18 @@ const Like:Record<string,number|Record<string, boolean>> = {
     }
 }
 
-const Cart = {
-    "count" : 0,
+// const Cart:Record<string,number|Record<string, number>>= {
+const Cart:CartObjType= {
+    "count" : 4,
     "items" : {
-
+        "Coca-Cola" : 1,
+        "Bananas" : 1,
+        "Croissants" : 2
     }
 }
 
-const Inventory:Record<string, number> = {
+// const Inventory:Record<string, number> = {
+const Inventory:InvObjType = {
 
 }
 
