@@ -4,7 +4,7 @@ import { IoIosHeart } from "react-icons/io";
 
 function LikeIcon({style, state,}:{
     style?:string,
-    state?:boolean,
+    state:boolean,
 }){
 
     return (
