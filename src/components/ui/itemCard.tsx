@@ -36,12 +36,14 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                 cartObj.items[item.name] = 1;
                 cartObj.count++;
                 localStorage.setItem("Cart",JSON.stringify(cartObj));
+                //@ts-ignore
                 setCartCount(t=>t+1);
             } 
             else{
                 cartObj.items[item.name]++;
                 cartObj.count++;
                 localStorage.setItem("Cart",JSON.stringify(cartObj));
+                //@ts-ignore
                 setCartCount(t=>t+1);
             }
         }
