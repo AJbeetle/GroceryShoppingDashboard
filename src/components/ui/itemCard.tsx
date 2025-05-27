@@ -3,6 +3,8 @@ import type { apiItems } from "../../types/interfaces/items"
 import CartIcon from "../icons/cart"
 import LikeIcon from "../icons/like"
 import {useState, useRef} from "react";
+import {useSetRecoilState} from "recoil"
+import { cartCountAtom } from "../../store/atoms and selectors/cart";
 
 
 function ItemCard({item, likeState, userSessionItemAvailable} : {
@@ -13,6 +15,7 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
     const [stateOfLike, setStateOfLike] = useState(likeState); // this is used just to make re-render in the page so that like button gets colored to red
     const [itemAvailability, setItemAvailability] = useState(userSessionItemAvailable);
     const dialogBox = useRef(null);
+    const setCartCount = useSetRecoilState(cartCountAtom);
 
     function toggleLike(){
         const likeObj = JSON.parse(localStorage.getItem("Like") as string);
@@ -33,11 +36,13 @@ function ItemCard({item, likeState, userSessionItemAvailable} : {
                 cartObj.items[item.name] = 1;
                 cartObj.count++;
                 localStorage.setItem("Cart",JSON.stringify(cartObj));
+                setCartCount(t=>t+1);
             } 
             else{
                 cartObj.items[item.name]++;
                 cartObj.count++;
                 localStorage.setItem("Cart",JSON.stringify(cartObj));
+                setCartCount(t=>t+1);
             }
         }
 
