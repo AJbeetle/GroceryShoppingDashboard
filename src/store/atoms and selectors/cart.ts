@@ -6,6 +6,12 @@ const cartCountAtom = atom({
     default : JSON.parse(localStorage.getItem("Cart") as string)["count"]
 })
 
+const cartElementsAtom = atom({
+    key : "allCartItems",
+    default : JSON.parse(localStorage.getItem("Cart") as string)["items"]
+})
+
 export {
-    cartCountAtom
+    cartCountAtom,
+    cartElementsAtom
 }

@@ -121,6 +121,21 @@ const drinkSelector = selector({
     }
 })
 
+const searchResultAtom = atom({
+    key : "itemSearchResult",
+    default : []
+})
+
+const searchItemsSelector = selector({
+    key : "searchItemData",
+    get : function({get}){
+        const namesToMatch:string[] = get(searchResultAtom);
+        const MatchList:string[] = namesToMatch.map(el => el.toLowerCase()); 
+        const allItems:apiItems[] = get(allItemAtom);
+        const searchItems:apiItems[] = allItems.filter(el => MatchList.includes(el.name.toLowerCase()))
+        return searchItems;
+    }
+})
 
 export {
     allItemAtom, 
@@ -129,6 +144,8 @@ export {
     bakerySelector, 
     drinkSelector, 
     trendingItemSelector,
+    searchResultAtom,
+    searchItemsSelector
     // bakeryAtom,
     // fruitAtom,
     // drinksAtom
