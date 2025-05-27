@@ -3,6 +3,9 @@ import { allItemAtom, cardItemsSelector, trendingItemSelector, fruitSelector, dr
 import type { apiItems, cardItems } from "../types/interfaces/items";
 import ItemCard from "../components/ui/itemCard";
 import { cartCountAtom } from "../store/atoms and selectors/cart";
+import TopBar from "../components/ui/topBar";
+import { PiSlidersHorizontalFill } from "react-icons/pi";
+
 
 function DesignSheet(){
     const items:cardItems[] = useRecoilValue(cardItemsSelector);
@@ -23,7 +26,8 @@ function DesignSheet(){
     
 
     return (
-        <div className="flex flex-wrap flex-col">
+        <div className="flex flex-wrap flex-col ">
+            <TopBar/>
             <div className="m-10 p-4 bg-red-800 text-white-default">
                 Cart : {
                     cartItemsCount
