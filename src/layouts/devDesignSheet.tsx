@@ -39,7 +39,7 @@ function DesignSheet(){
             <div className="allItems flex flex-wrap">
                 {
                     items.map((el:cardItems,i:number) => {
-                        if(LikeObject[`${el.name}`]===true){
+                        if(LikeObject.items[`${el.name}`]===true){
                             return (
                                 <ItemCard item={el} likeState={true} key={i} userSessionItemAvailable={InvObj[`${el.name}`]}></ItemCard>
                             )
