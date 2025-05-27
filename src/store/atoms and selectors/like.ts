@@ -1,11 +1,19 @@
 
 import {atom, selector} from "recoil"
 
-const likesAtom = atom ({
-    key : "allLikedProducts",
-    default : 0
+
+const likedCountAtom = atom ({
+    key : "LikeCount",
+    default : JSON.parse(localStorage.getItem("Like") as string)["count"]
+})
+
+
+const likedElementsAtom = atom({
+    key : "allLikedItems",
+    default : JSON.parse(localStorage.getItem("Like") as string)["items"]
 })
 
 export {
-    likesAtom
+    likedCountAtom,
+    likedElementsAtom
 }
