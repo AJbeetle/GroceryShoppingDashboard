@@ -24,7 +24,13 @@ function App() {
     callDB().then(res=>{
       // const inventoryObj:Record<string, number> = {};
       for(let i=0; i<res.length;i++){
-        Inventory[`${res[i].name}`] = res[i].available
+        const cartItems = JSON.parse(localStorage.getItem("Cart") as string)["items"];
+        if(cartItems[res[i].name]){
+          Inventory[`${res[i].name}`] = res[i].available - cartItems[res[i].name]
+        }
+        else{
+          Inventory[`${res[i].name}`] = res[i].available
+        }
       }
       // console.log(Inventory)
       localStorage.setItem("Inventory",JSON.stringify(Inventory))
