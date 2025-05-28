@@ -10,7 +10,7 @@ export type CartObjType = {
 
 export type InvObjType = Record<string, number>
 
-// type OffersType = 
+export type OffersType = Record<string, Record<string, number | Record<string, number|string> >>
 
 // const Like:Record<string,number|Record<string, boolean>> = {
 const Like:LikeObjType = {
@@ -27,7 +27,7 @@ const Cart:CartObjType= {
     "items" : {
         "Coca-Cola" : 1,
         "Bananas" : 1,
-        "Croissants" : 2
+        "Croissants" : 2,
     }
 }
 
@@ -37,7 +37,7 @@ const Inventory:InvObjType = {
 }
 
 
-const Offers = {
+const Offers:OffersType = {
     "Coca-Cola" : {
         itemCount : 6,
         itemOffered : {
