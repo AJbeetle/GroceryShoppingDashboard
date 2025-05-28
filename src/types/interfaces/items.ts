@@ -22,3 +22,10 @@ export interface apiItems extends cardItems {
     id :number,
     rating : number,
 }
+
+export interface cartCardItems {
+    id  : number,
+    name : string,
+    price : string,
+    img : URL
+}
