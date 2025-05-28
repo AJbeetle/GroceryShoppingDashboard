@@ -43,6 +43,26 @@ const cardItemsSelector = selector({
     }
 })
 
+import type { cartCardItems } from "../../types/interfaces/items";
+
+const cartCardSelector = selector({
+    key : "valuesNeededForCartCard",
+    get : function({get}){
+        const allData:apiItems[] = get(allItemAtom);
+        const limitedData:cartCardItems[]=[];
+
+        for(let i=0; i<allData.length; i++){
+            limitedData[i] = {
+                id : allData[i].id,
+                name : allData[i].name,
+                price : allData[i].price,
+                img : allData[i].img
+            }
+        }
+        return limitedData;
+    }
+})
+
 const trendingItemSelector = selector({
     key : "trendingItems",
     get : function({get}){
@@ -145,7 +165,8 @@ export {
     drinkSelector, 
     trendingItemSelector,
     searchResultAtom,
-    searchItemsSelector
+    searchItemsSelector,
+    cartCardSelector
     // bakeryAtom,
     // fruitAtom,
     // drinksAtom
