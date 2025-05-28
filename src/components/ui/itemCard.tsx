@@ -6,6 +6,7 @@ import {useState, useRef} from "react";
 import {useSetRecoilState} from "recoil"
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
 import { likedCountAtom } from "../../store/atoms and selectors/like";
+import type { OffersType } from "../../store/loaclStorage";
 
 
 function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtraRender} : {
@@ -20,6 +21,7 @@ function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtr
     const [itemAvailability, setItemAvailability] = useState(userSessionItemAvailable);
     const setCartCount = useSetRecoilState(cartCountAtom);
     const setLikeCount = useSetRecoilState(likedCountAtom);
+    const offerObj= JSON.parse(localStorage.getItem("Offers") as string);
 
     function toggleLike(){
         
@@ -132,6 +134,25 @@ function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtr
                 </div>
 
                 <div className="w-full">
+                    { 
+                        offerObj[item.name]!=undefined? 
+                        <div className="bg-yellow-400 text-white-default px-2 my-2 rounded-lg flex flex-col items-start">
+                            <div className="font-bold underline">
+                                Offer
+                            </div>
+                            <div>
+                                Buy &nbsp;
+                                { offerObj[item.name].itemCount }    
+                                &nbsp;
+                                GET { `+${offerObj[item.name]["itemOffered"].quantity}` } &nbsp;
+                                {
+                                    offerObj[item.name]["itemOffered"].name == item.name ? "More" : offerObj[item.name]["itemOffered"].name
+                                }
+                            </div>
+                        </div> : 
+                        null
+                    }
+
                     <div className="w-full text-sm mb-10 ">
                         {
                             itemAvailability >=10 ? 
