@@ -39,11 +39,13 @@ function DesignSheet(){
     return (
         <div className="flex flex-wrap flex-col ">
             {/* ELEMENT 1 : TOPBAR --------------------------------------------------------------------------------------------- */}
-            <TopBar/>   
+            <div className="w-full left-0 bg-white-default h-[100px] flex justify-center items-center">
+                <TopBar/>   
+            </div>  
 
 
             {/* ELEMENT 2 : SEARCH_RESULTS --------------------------------------------------------------------------------------------- */}
-            <p className="text-xs font-bold  mt-10 w-[100%]">SEARCH RESULTS WILL APPEAR HERE ...</p>
+            <p className="text-xs font-bold m-4 w-[100%]">SEARCH RESULTS WILL APPEAR HERE ...</p>
             {
                 searchs.length>0 ? 
                 // Scrollable Design : bottom two lines
@@ -71,7 +73,7 @@ function DesignSheet(){
                 </div> :
                 <div>
                     {/* ELEMENT 3 : CATEORIES BUTTONS --------------------------------------------------------------------------------------------- */}
-                    <div className="m-5 p-2 flex w-full justify-start gap-8">
+                    <div className=" p-2     flex w-full justify-start gap-8 ">
                         <button className="bg-white-default w-[140px] rounded-full border-2 border-solid border-gray-stroke px-6 py-2 shadow-lg active:scale-95 " onClick={()=>changeView(items)}>
                             All Items
                         </button>
