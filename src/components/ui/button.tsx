@@ -1,0 +1,1 @@
+// generic button component that can be used all over the website : can be created if webApp scales

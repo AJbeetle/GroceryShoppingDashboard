@@ -103,7 +103,7 @@ function DesignSheet(){
                                 // console.log(`${InvObj[el.name]} : ${invCount}`);
 
                                 return (
-                                    // bro I just spent last 5-6 hours finding what the error is in my UI, that my cards are not displaying props properly : and it was this key prop which was skdnsakdj the UI
+                                    // bro I just spent last 5-6 hours finding what the error is in my UI, that my cards are not displaying props properly : and it was this key prop which was set here
                                     // DAAMMMNNNN NOW I UNDERSTOOD THE REAL RELEVANCE OF *********KEY*********
                                         //@ts-ignore
                                         <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount}></ItemCard>

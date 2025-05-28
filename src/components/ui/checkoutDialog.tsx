@@ -1,0 +1,1 @@
+// when in dashboard user clicks on cart icon more than once : open a dialog box which lets them add or delete num of items from cart then and there 
