@@ -44,8 +44,13 @@ function DesignSheet(){
             <p className="text-xs font-bold  mt-10 w-[100%]">SEARCH RESULTS WILL APPEAR HERE ...</p>
             {
                 searchs.length>0 ? 
-                <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start overflow-scroll scrollbar-none"> 
-                <div className="flex overflow-hidden justify-center items-center ">
+                // Scrollable Design : bottom two lines
+                // <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start overflow-scroll scrollbar-none"> 
+                // <div className="flex overflow-hidden justify-center items-center "> 
+
+                // Non-scrollable design
+                <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start"> 
+                <div className="flex overflow-hidden justify-start items-center flex-wrap">
                     {
                         searchs.map((el:apiItems | cardItems,i:number) => {
                             const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
