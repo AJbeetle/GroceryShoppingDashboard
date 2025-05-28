@@ -8,6 +8,7 @@ import { PiSlidersHorizontalFill } from "react-icons/pi";
 import {useRef, useState, useEffect} from "react"
 import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
 import CartItemCard from "../components/ui/cartCard";
+import BackToTopButton from "../components/ui/takeToTop";
 
 function DesignSheet(){
     const [item, setItem ] = useState(false); //this is just a state atom to be triggered in order to re render this design page : if something is added to cart, or liked from user in search panel
@@ -131,6 +132,7 @@ function DesignSheet(){
                 <CartItemCard cartItem={CartObj} setReRender={setCartReRender}/>
             </div>
             
+            <BackToTopButton/>
             
         </div>
     )
