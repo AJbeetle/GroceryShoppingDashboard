@@ -72,6 +72,33 @@ const trendingItemSelector = selector({
     }
 })
 
+const likedElementSelector = selector({
+    key : "likedItemsForRecommendations",
+    get : function({get}){
+        let Liked:apiItems[] = [];
+        try{
+            const like = localStorage.getItem("Like");
+            if(!like) return Liked;  // returning empty array as no recommendation for user
+            const likeObj = JSON.parse(like);
+            const extractingNamesOfLikedElems:string[] = [];
+            const LikeElems = Object.keys(likeObj.items);
+        
+            for(let i=0; i<LikeElems.length; i++){
+                if(likeObj.items[LikeElems[i]]===true){
+                    extractingNamesOfLikedElems.push(LikeElems[i]);
+                }
+            }
+
+            const allItems:apiItems[] = get(allItemAtom);
+            Liked = allItems.filter((el)=> extractingNamesOfLikedElems.includes(el.name));
+            return Liked;
+        }
+        catch(e){
+            console.log("Error Parsing the Like from localStorage",e);
+        }
+    }
+})
+
 
 // Creating Separate atoms : making more backend API calls, will be useful if databsse is very heavy and lazy loading is required or data is paginated and when we donot have shared abse data. 
 /* const fruitAtom = atom ({
@@ -157,6 +184,8 @@ const searchItemsSelector = selector({
     }
 })
 
+
+
 export {
     allItemAtom, 
     cardItemsSelector, 
@@ -166,7 +195,8 @@ export {
     trendingItemSelector,
     searchResultAtom,
     searchItemsSelector,
-    cartCardSelector
+    cartCardSelector,
+    likedElementSelector
     // bakeryAtom,
     // fruitAtom,
     // drinksAtom
