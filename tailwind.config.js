@@ -21,7 +21,8 @@ export default {
           base : "#ff9446",   // 50% opacity
         },
         green : {
-          base : "#00ca14"  // 50% opacity
+          base : "#00ca14",  // 50% opacity
+          button : "#7FD287" 
         },
         gray : {
           icon_light : "#979797",
