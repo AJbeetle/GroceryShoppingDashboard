@@ -136,5 +136,6 @@ Enjoy hacking! ✨
 
 
 ## Cart Items
-![Cart Items](https://github.com/user-attachments/assets/935a5efc-d944-4985-8cac-979ade163422)
+![Cart Items](https://github.com/user-attachments/assets/de6b6ad5-18ff-4c61-b7f2-bd5f7f3dfa95)
+
 
