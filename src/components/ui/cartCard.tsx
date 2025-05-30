@@ -1,9 +1,10 @@
 import type { CartObjType } from "../../store/loaclStorage"
 import {useRecoilValue, useSetRecoilState} from "recoil"
-import { cartCardSelector } from "../../store/atoms and selectors/items";
+import { cartCardSelector, freeItemsInCartCardSelector } from "../../store/atoms and selectors/items";
 import type { cartCardItems } from "../../types/interfaces/items";
 import { AddIcon, MinusIcon, RemoveIcon } from "../icons/cartFunc";
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
+import freeElementsAtom from "../../store/atoms and selectors/free";
 
 import {useState, useEffect} from "react"
 
@@ -19,6 +20,10 @@ function CartItemCard({cartItem, setReRender}: {
     const cartCount = useRecoilValue(cartCountAtom);
     const [itemAvailability, setItemAvailability] = useState(0);
     const [total, setTotal] = useState(0);
+    const freeItems = useRecoilValue(freeItemsInCartCardSelector) as cartCardItems[];
+    // console.log("free Items Selector : ",freeItems);
+    const freeElemAtom = useRecoilValue(freeElementsAtom);
+    console.log("free Atom  : ",freeElemAtom)
 
 
     function addToCART(elm : cartCardItems, offer:boolean){
@@ -173,6 +178,17 @@ function CartItemCard({cartItem, setReRender}: {
         invObj[elm.name] = invObj[elm.name] + item_count
         localStorage.setItem("Inventory",JSON.stringify(invObj));
 
+        if(offer){
+            const freeObj = JSON.parse(localStorage.getItem("Free") as string);
+            const multiple = offerObj[elm.name]["itemCount"];
+            const itemOffered = offerObj[elm.name]["itemOffered"].name;   //this variable stores name of whatever is free OR you can say addOn
+            const itemCount = offerObj[elm.name]["itemOffered"].quantity;    //this is quantity of free item
+            if(freeObj.items[itemOffered]>0){
+                    freeObj.items[itemOffered]=0;
+                    localStorage.setItem("Free",JSON.stringify(freeObj));
+            }
+        }
+
         setReRender(t=>!t);
     }
 
@@ -190,10 +206,34 @@ function CartItemCard({cartItem, setReRender}: {
         SetTOTAL();
     },[cartCount])
 
+    // useEffect(function(){
+    //     console.log("free Atom  : ",freeElemAtom)
+    // },[freeElemAtom])
+
     return (
         <>
-        <div className="flex flex-col gap-8">
-            {/* Content Extraction */}
+        <div className="flex flex-col gap-8 bg-gray-100 p-10 rounded-xl">
+            <p className="ml-10 text-gray-icon_dark font-bold">FREE ITEMS ADDED ..</p>
+            <div>
+                {/* {
+                    freeItems[0].name 
+                } */}
+                {/* {
+                    freeItems?.map((el, i) => {
+                        return(
+                            <div>
+                                {
+                                    el.count
+                                }
+                            </div>
+                        )
+                    })
+                } */}
+            </div>  
+        </div>
+
+        {/* Cart Items */}    
+        <div className="flex flex-col gap-8 mt-10">
             {
                 Object.keys(cartItem.items).map((el:string,i:number)=>{
                     const element = allItems.find(e => e.name == el) as cartCardItems;
@@ -298,6 +338,8 @@ function CartItemCard({cartItem, setReRender}: {
             }
         </div>  
 
+
+        {/* Checkout Details */}
         <div className="mt-10 flex flex-col justify-center w-[70%]">
             <div className="flex flex-col gap-8">
                 <hr></hr>
