@@ -6,18 +6,18 @@
 3. If user selects Bakery : show all Bakery in API
 */
 
-import {useRecoilValue, useSetRecoilState} from "recoil"
-import { allItemAtom, cardItemsSelector, trendingItemSelector, fruitSelector, drinkSelector, bakerySelector, searchItemsSelector } from "../store/atoms and selectors/items"
+import {useRecoilValue} from "recoil"
+import { cardItemsSelector, trendingItemSelector, fruitSelector, drinkSelector, bakerySelector, searchItemsSelector } from "../store/atoms and selectors/items"
 import type { apiItems, cardItems } from "../types/interfaces/items";
 import ItemCard from "../components/ui/itemCard";
-import { cartCountAtom } from "../store/atoms and selectors/cart";
+// import { cartCountAtom } from "../store/atoms and selectors/cart";
 import TopBar from "../components/ui/topBar";
-import { PiSlidersHorizontalFill } from "react-icons/pi";
-import {useRef, useState, useEffect} from "react"
-import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
-import CartItemCard from "../components/ui/cartCard";
+// import { PiSlidersHorizontalFill } from "react-icons/pi";
+import {useState} from "react"
+// import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
+// import CartItemCard from "../components/ui/cartCard";
 import BackToTopButton from "../components/ui/takeToTop";
-import { likedElementSelector } from "../store/atoms and selectors/items"; 
+// import { likedElementSelector } from "../store/atoms and selectors/items"; 
 
 function Dashboard(){
     const [item, setItem ] = useState(false); //this is just a state atom to be triggered in order to re render this design page : if something is added to cart, or liked from user in search panel
@@ -27,23 +27,23 @@ function Dashboard(){
     const drinks:apiItems[] = useRecoilValue(drinkSelector);
     const bakery:apiItems[] = useRecoilValue(bakerySelector);
     const searchs:apiItems[] = useRecoilValue(searchItemsSelector);
-    const cartItemsCount = useRecoilValue(cartCountAtom);
-    const [cartReRender, setCartReRender] = useState(false);
-    const likes:apiItems[] = useRecoilValue(likedElementSelector) as apiItems[];
+    // const cartItemsCount = useRecoilValue(cartCountAtom);
+    // const [cartReRender, setCartReRender] = useState(false);
+    // const likes:apiItems[] = useRecoilValue(likedElementSelector) as apiItems[];
 
     // const [view, setView] : [cardItems[] | apiItems[], React.Dispatch<React.SetStateAction<undefined>> | any] = useState(items);
-    const [view, setView] = useState<cardItems[] | apiItems[]>(items);
+    const [view, setView] = useState<cardItems[] | apiItems[] | undefined>(items);
     // let LikeObject:Record<string,number|Record<string, boolean>>, InvObj:Record<string, number>, CartObj:Record<string,number|Record<string, number>>;
 
     let LikeObject = JSON.parse(localStorage.getItem("Like") as string);
     let InvObj = JSON.parse(localStorage.getItem("Inventory") as string);
     let CartObj = JSON.parse(localStorage.getItem("Cart") as string);
-    let offerObj = JSON.parse(localStorage.getItem("Offers") as string);
 
 
 
     function changeView(viewName:apiItems[] | cardItems[]){
         setView(viewName);
+        console.log(item);
         // console.log(view);
     }
 
@@ -51,7 +51,7 @@ function Dashboard(){
         <div className="flex flex-wrap flex-col ">
             {/* ELEMENT 1 : TOPBAR --------------------------------------------------------------------------------------------- */}
             <div className="w-full left-0 bg-white-default h-[100px] flex justify-center items-center">
-                <TopBar/>   
+                <TopBar setView={setView}/>   
             </div>  
 
             {/* ELEMENT 2 : SEARCH_RESULTS --------------------------------------------------------------------------------------------- */}
@@ -68,7 +68,7 @@ function Dashboard(){
 
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                     )
 
                             
@@ -96,7 +96,7 @@ function Dashboard(){
                     {/* ELEMENT 4 : ITEMS LIST IN FORM OF CARDS --------------------------------------------------------------------------------------------- */}
                     <div className="flex flex-wrap">
                         {
-                            view.map((el:apiItems | cardItems,i:number) => {
+                            view?.map((el:apiItems | cardItems,i:number) => {
                                 //  console.log(el);
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
                                 const likeState = (LikeObject.items[el.name]===true) ? true : false;
@@ -104,7 +104,7 @@ function Dashboard(){
 
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount}></ItemCard>
                                 )
                             })
                         }
@@ -142,7 +142,7 @@ function Dashboard(){
                 view==items &&  
                 <>
                 <p className="text-xl font-bold m-10 w-[100%]">TRENDY ITEMS ...</p>
-                <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start overflow-scroll scrollbar-x-hidden  p-6 rounded-lg bg-neutral-200"> 
+                <div className="flex flex-wrap flex-col w-[100%] justify-center items-start overflow-scroll scrollbar-x-hidden  p-6 rounded-lg bg-neutral-200"> 
                     <div className="flex overflow-hidden justify-center items-center gap-6 m-6"> 
                         {
                             trendy.map((el:apiItems | cardItems,i:number) => {
@@ -151,7 +151,7 @@ function Dashboard(){
                                 const invCount = InvObj[el.name]
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                     )
                             })  
                         }

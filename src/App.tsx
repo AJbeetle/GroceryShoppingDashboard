@@ -1,9 +1,9 @@
-import { useState , useEffect} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {useEffect} from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
-import DesignSheet from './layouts/devDesignSheet'
-import {BrowserRouter, Routes, Route, Link, useNavigate} from "react-router-dom"
+// import DesignSheet from './layouts/devDesignSheet'
+import { Routes, Route} from "react-router-dom"
 
 import {Like, Cart, Offers, Inventory, Free} from "./store/loaclStorage"
 import axios from 'axios'

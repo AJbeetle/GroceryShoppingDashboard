@@ -1,6 +1,7 @@
 import type { CartObjType } from "../../store/loaclStorage"
 import {useRecoilValue, useSetRecoilState} from "recoil"
-import { cartCardSelector, freeItemsInCartCardSelector } from "../../store/atoms and selectors/items";
+// import { freeItemsInCartCardSelector } from "../../store/atoms and selectors/items";
+import { cartCardSelector } from "../../store/atoms and selectors/items";
 import type { cartCardItems } from "../../types/interfaces/items";
 import { AddIcon, MinusIcon, RemoveIcon } from "../icons/cartFunc";
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
@@ -20,10 +21,11 @@ function CartItemCard({cartItem, setReRender}: {
     const cartCount = useRecoilValue(cartCountAtom);
     const [itemAvailability, setItemAvailability] = useState(0);
     const [total, setTotal] = useState(0);
-    const freeItems = useRecoilValue(freeItemsInCartCardSelector) as cartCardItems[];
+    // const freeItems = useRecoilValue(freeItemsInCartCardSelector) as cartCardItems[];
     // console.log("free Items Selector : ",freeItems);
     const freeElemAtom = useRecoilValue(freeElementsAtom);
     console.log("free Atom  : ",freeElemAtom)
+    console.log(itemAvailability);
 
 
     function addToCART(elm : cartCardItems, offer:boolean){
@@ -180,9 +182,7 @@ function CartItemCard({cartItem, setReRender}: {
 
         if(offer){
             const freeObj = JSON.parse(localStorage.getItem("Free") as string);
-            const multiple = offerObj[elm.name]["itemCount"];
             const itemOffered = offerObj[elm.name]["itemOffered"].name;   //this variable stores name of whatever is free OR you can say addOn
-            const itemCount = offerObj[elm.name]["itemOffered"].quantity;    //this is quantity of free item
             if(freeObj.items[itemOffered]>0){
                     freeObj.items[itemOffered]=0;
                     localStorage.setItem("Free",JSON.stringify(freeObj));
@@ -240,6 +240,7 @@ function CartItemCard({cartItem, setReRender}: {
                     // const pr = (parseInt((element.price).split("£")[1])*cartItem.items[el]);
                     // console.log(pr);
                     // setItemAvailability(invObj[el]);    //it trigerrs inifinite renders 
+                    console.log(i);
                     let offer = false;
                     console.log(Object.keys(offerObj));
                     if(Object.keys(offerObj).includes(el)){

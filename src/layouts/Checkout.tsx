@@ -1,12 +1,13 @@
-import {useRecoilValue, useSetRecoilState} from "recoil"
-import { allItemAtom, cardItemsSelector, trendingItemSelector, fruitSelector, drinkSelector, bakerySelector, searchItemsSelector } from "../store/atoms and selectors/items"
+import {useRecoilValue} from "recoil"
+import { cardItemsSelector, searchItemsSelector } from "../store/atoms and selectors/items"
 import type { apiItems, cardItems } from "../types/interfaces/items";
 import ItemCard from "../components/ui/itemCard";
 import { cartCountAtom } from "../store/atoms and selectors/cart";
 import TopBar from "../components/ui/topBar";
-import { PiSlidersHorizontalFill } from "react-icons/pi";
-import {useRef, useState, useEffect} from "react"
-import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
+// import { PiSlidersHorizontalFill } from "react-icons/pi";
+import {useState} from "react"
+// import {useRef, useState, useEffect} from "react"
+// import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
 import CartItemCard from "../components/ui/cartCard";
 import BackToTopButton from "../components/ui/takeToTop";
 
@@ -14,10 +15,6 @@ import BackToTopButton from "../components/ui/takeToTop";
 function CartPage(){
     const [item, setItem ] = useState(false); //this is just a state atom to be triggered in order to re render this design page : if something is added to cart, or liked from user in search panel
     const items:cardItems[] = useRecoilValue(cardItemsSelector);
-    const trendy:apiItems[] = useRecoilValue(trendingItemSelector);
-    const fruits:apiItems[] = useRecoilValue(fruitSelector);
-    const drinks:apiItems[] = useRecoilValue(drinkSelector);
-    const bakery:apiItems[] = useRecoilValue(bakerySelector);
     const searchs:apiItems[] = useRecoilValue(searchItemsSelector);
     const cartItemsCount = useRecoilValue(cartCountAtom);
     const [cartReRender, setCartReRender] = useState(false);
@@ -29,14 +26,15 @@ function CartPage(){
     let LikeObject = JSON.parse(localStorage.getItem("Like") as string);
     let InvObj = JSON.parse(localStorage.getItem("Inventory") as string);
     let CartObj = JSON.parse(localStorage.getItem("Cart") as string);
-    let offerObj = JSON.parse(localStorage.getItem("Offers") as string);
+    // let offerObj = JSON.parse(localStorage.getItem("Offers") as string);
+
+    console.log(item,cartItemsCount,cartReRender, view,)
 
 
-
-    function changeView(viewName:apiItems[] | cardItems[]){
-        setView(viewName);
-        // console.log(view);
-    }
+    // function changeView(viewName:apiItems[] | cardItems[]){
+    //     setView(viewName);
+    //     // console.log(view);
+    // }
 
     return (
         <div className="flex flex-wrap flex-col">
@@ -62,7 +60,7 @@ function CartPage(){
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
                                 const likeState = (LikeObject.items[el.name]===true) ? true : false;
                                 const invCount = InvObj[el.name]
-
+                                console.log(i);
                                 return (
                                         //@ts-ignore
                                         <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
