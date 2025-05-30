@@ -27,5 +27,6 @@ export interface cartCardItems {
     id  : number,
     name : string,
     price : string,
-    img : URL
+    img : URL,
+    count? :number
 }

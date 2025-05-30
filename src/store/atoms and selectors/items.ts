@@ -63,6 +63,49 @@ const cartCardSelector = selector({
     }
 })
 
+import freeElementsAtom from "./free";
+
+const freeItemsInCartCardSelector = selector({
+    key : "freeItemsinCart",
+    get : function({get}){
+        let FreeItems : cartCardItems[] = [];
+        try{
+            // const free = localStorage.getItem("Free");
+            const free = get(freeElementsAtom); 
+            if(!free) return FreeItems;  // returning empty array as no recommendation for user
+            const freeObjItems = JSON.parse(free);
+
+            const extractingNamesOfFreeElems:string[] = [];
+            const FreeElems = Object.keys(freeObjItems);
+        
+            for(let i=0; i<FreeElems.length; i++){
+                if(freeObjItems[FreeElems[i]]>0){
+                    extractingNamesOfFreeElems.push(FreeElems[i]);
+                }
+            }
+
+            const allData:apiItems[] = get(allItemAtom);
+            // Free = allItems.filter((el)=> extractingNamesOfLikedElems.includes(el.name));
+            for(let i = 0; i<allData.length; i++){
+                if(extractingNamesOfFreeElems.includes(allData[i].name)){
+                    FreeItems.push({
+                        id: allData[i].id,
+                        name: allData[i].name,
+                        price: allData[i].price,
+                        img: allData[i].img,
+                        count: freeObjItems[allData[i].name] || 0,
+                    });
+                }
+            }
+
+            return FreeItems;
+        }
+        catch(e){
+            console.log("Error Parsing the Like from localStorage",e);
+        }
+    }
+})
+
 const trendingItemSelector = selector({
     key : "trendingItems",
     get : function({get}){
@@ -196,7 +239,8 @@ export {
     searchResultAtom,
     searchItemsSelector,
     cartCardSelector,
-    likedElementSelector
+    likedElementSelector,
+    freeItemsInCartCardSelector
     // bakeryAtom,
     // fruitAtom,
     // drinksAtom
