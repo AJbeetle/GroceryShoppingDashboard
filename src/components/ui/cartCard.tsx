@@ -14,10 +14,12 @@ function CartItemCard({cartItem, setReRender}: {
     const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
     const invObj = JSON.parse(localStorage.getItem("Inventory") as string);
     const allItems = useRecoilValue(cartCardSelector);
+    const offerObj = JSON.parse(localStorage.getItem("Offers") as string);
     const setCartCount = useSetRecoilState(cartCountAtom);
     const cartCount = useRecoilValue(cartCountAtom);
     const [itemAvailability, setItemAvailability] = useState(0);
     const [total, setTotal] = useState(0);
+
 
     function addToCART(elm : cartCardItems){
         // update cartCountAtom
@@ -134,7 +136,16 @@ function CartItemCard({cartItem, setReRender}: {
                     // const pr = (parseInt((element.price).split("£")[1])*cartItem.items[el]);
                     // console.log(pr);
                     // setItemAvailability(invObj[el]);    //it trigerrs inifinite renders 
+                    let offer = false;
+                    console.log(Object.keys(offerObj));
+                    if(Object.keys(offerObj).includes(el)){
+                        offer = true;
+                    }
+                    else{
+                        false;
+                    }
                     return (
+                        <div className="w-[100%] flex gap-10">
                         <div className="flex m-1 bg-white-default shadow-lg p-6 rounded-3xl w-[70%] justify-between" key={el}>
                             {/* Image and Name */}
                             <div className="flex w-[40%] gap-6 ">
@@ -193,6 +204,30 @@ function CartItemCard({cartItem, setReRender}: {
                                 </div>
 
                             </div>
+                        </div>
+
+                        {
+                            offer && 
+                            <div className="w-[10%] flex m-1 bg-yellow-400 font-bold text-white-default shadow-lg p-6 rounded-3xl justify-between">
+                                 <div className="bg-yellow-400 text-white-default px-2 my-2 rounded-lg flex flex-col items-start">
+                                    <div className="font-bold underline">
+                                        Offer
+                                    </div>
+                                    <div>
+                                        Buy &nbsp;
+                                        { offerObj[el].itemCount }    
+                                        &nbsp;
+                                        <br></br>
+                                        { `+${offerObj[el]["itemOffered"].quantity}` } &nbsp;
+                                        {
+                                            offerObj[el]["itemOffered"].name == el ? "More" : offerObj[el]["itemOffered"].name
+                                        }
+                                    </div>
+                                </div> 
+                            </div>
+                        }
+                        
+                            
                         </div>
                     )
                 })
