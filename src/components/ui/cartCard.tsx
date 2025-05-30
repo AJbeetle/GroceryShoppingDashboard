@@ -21,7 +21,7 @@ function CartItemCard({cartItem, setReRender}: {
     const [total, setTotal] = useState(0);
 
 
-    function addToCART(elm : cartCardItems){
+    function addToCART(elm : cartCardItems, offer:boolean){
         // update cartCountAtom
         // update localStorage cartObj
         // update localStorag invObj
@@ -56,13 +56,45 @@ function CartItemCard({cartItem, setReRender}: {
         const invObj = JSON.parse(localStorage.getItem("Inventory") as string);
         invObj[`${elm.name}`] = invObj[`${elm.name}`] - 1 ;
         localStorage.setItem("Inventory",JSON.stringify(invObj));
-        
 
         setItemAvailability(t => t-1);
 
+        if(offer){
+            const freeObj = JSON.parse(localStorage.getItem("Free") as string);
+            const multiple = offerObj[elm.name]["itemCount"];
+            const itemOffered = offerObj[elm.name]["itemOffered"].name;   //this variable stores name of whatever is free OR you can say addOn
+            const itemCount = offerObj[elm.name]["itemOffered"].quantity;    //this is quantity of free item
+            console.log(`${elm.name} have offer multiple : ${multiple} `)
+            console.log(cartObj.items[elm.name]%multiple)
+            if(cartObj.items[elm.name]%multiple==0){
+                console.log("itemOffered : ",itemOffered, "number of free item : ", itemCount);
+                console.log("offer applicable");
+                console.log(`Free items number : ${(cartObj.items[elm.name]/multiple)*itemCount}`)
+
+                if(freeObj.items[itemOffered]==undefined){
+                    // freeObj.count++;
+                    freeObj.items[itemOffered]=(cartObj.items[elm.name]/multiple)*itemCount;
+                }
+                // console.log(freeObj.items[itemOffered]);
+                else{
+                    // freeObj.count++;
+                    freeObj.items[itemOffered]=(cartObj.items[elm.name]/multiple)*itemCount;
+                }
+                localStorage.setItem("Free",JSON.stringify(freeObj));
+            }
+            // NOT NEEDED FOLLOWING LOGIC WHEN ADDING TO CART
+            // else{
+            //     if(freeObj.items[itemOffered]>0){
+            //         freeObj.items[itemOffered]=freeObj.items[itemOffered] - 1;
+            //         localStorage.setItem("Free",JSON.stringify(freeObj));
+            //     }
+            // }
+        }
+        
+
     }
     
-    function minusFromCART(elm : cartCardItems){
+    function minusFromCART(elm : cartCardItems, offer:boolean){
         // update cartCountAtom
         // update localStorage cartObj
         // update localStorag invObj
@@ -70,7 +102,7 @@ function CartItemCard({cartItem, setReRender}: {
         const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
 
         if(cartObj.items[elm.name] == 1){
-            removeFromCART(elm);
+            removeFromCART(elm, offer);
             return; 
         }
 
@@ -88,9 +120,41 @@ function CartItemCard({cartItem, setReRender}: {
         
 
         setItemAvailability(t => t+1);
+
+        if(offer){
+            const freeObj = JSON.parse(localStorage.getItem("Free") as string);
+            const multiple = offerObj[elm.name]["itemCount"];
+            const itemOffered = offerObj[elm.name]["itemOffered"].name;   //this variable stores name of whatever is free OR you can say addOn
+            const itemCount = offerObj[elm.name]["itemOffered"].quantity;    //this is quantity of free item
+            console.log(`${elm.name} have offer multiple : ${multiple} `)
+            // console.log(cartObj.items[elm.name]%multiple)
+            if(cartObj.items[elm.name]%multiple==0){
+                console.log("itemOffered : ",itemOffered, "number of free item : ", itemCount);
+                console.log("offer applicable");
+                console.log(`Free items number : ${(cartObj.items[elm.name]/multiple)*itemCount}`)
+
+                if(freeObj.items[itemOffered]==undefined){
+                    // freeObj.count++;
+                    freeObj.items[itemOffered]=(cartObj.items[elm.name]/multiple)*itemCount;
+                }
+                // console.log(freeObj.items[itemOffered]);
+                else{
+                    // freeObj.count++;
+                    freeObj.items[itemOffered]=(cartObj.items[elm.name]/multiple)*itemCount;
+                }
+                localStorage.setItem("Free",JSON.stringify(freeObj));
+            }
+            else{
+                if(freeObj.items[itemOffered]>0){
+                    freeObj.items[itemOffered]=freeObj.items[itemOffered] - 1;
+                    localStorage.setItem("Free",JSON.stringify(freeObj));
+                }
+            }
+        }
+        
     }
 
-    function removeFromCART(elm : cartCardItems){
+    function removeFromCART(elm : cartCardItems, offer:boolean){
         // update localStorage cartObj
         // update cartCountAtom
         // update localStorag invObj
@@ -163,7 +227,7 @@ function CartItemCard({cartItem, setReRender}: {
                                 <div className="flex flex-col w-full gap-2">
                                     <div className="flex justify-center items-center w-full ">
                                         <div className="flex gap-4 w-[70%] justify-center">
-                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>minusFromCART(element)} disabled={cartObj.items[el]===0?true:false}>
+                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>minusFromCART(element, offer)} disabled={cartObj.items[el]===0?true:false}>
                                                 <MinusIcon/>
                                             </button>
                                             <p className="text-xl">
@@ -171,7 +235,7 @@ function CartItemCard({cartItem, setReRender}: {
                                                     cartItem.items[el]
                                                 }
                                             </p>
-                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>addToCART(element)} disabled={invObj[el]===0?true:false}> 
+                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>addToCART(element, offer)} disabled={invObj[el]===0?true:false}> 
                                                 <AddIcon/>
                                             </button>
                                         </div>
@@ -182,7 +246,7 @@ function CartItemCard({cartItem, setReRender}: {
                                             </div>
 
                                             <div className="justify-center items-center flex">
-                                                <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>removeFromCART(element)} disabled={false}>
+                                                <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>removeFromCART(element, offer)} disabled={false}>
                                                     <RemoveIcon/>
                                                 </button>
                                             </div>   
@@ -194,7 +258,7 @@ function CartItemCard({cartItem, setReRender}: {
                                             invObj[el] > 10 ? null :
                                             <div className="flex justify-center items-center w-[25%] bg-orange-base opacity-50 text-white-default text-xs p-2 rounded-lg">
                                                 {
-                                                    invObj[el] <= 10 ? (invObj[el] == 0 ? `no more allowed` : `Only ${invObj[el]} Left` ): null
+                                                    invObj[el] <= 10 ? (invObj[el] == 0 ? `limit reached` : `Only ${invObj[el]} Left` ): null
                                                 }
                                             </div>   
                                         }
@@ -208,7 +272,7 @@ function CartItemCard({cartItem, setReRender}: {
 
                         {
                             offer && 
-                            <div className="w-[10%] flex m-1 bg-yellow-400 font-bold text-white-default shadow-lg p-6 rounded-3xl justify-between">
+                            <div className="w-[20%] flex m-1 bg-yellow-400 font-bold text-white-default shadow-lg p-6 rounded-3xl justify-between">
                                  <div className="bg-yellow-400 text-white-default px-2 my-2 rounded-lg flex flex-col items-start">
                                     <div className="font-bold underline">
                                         Offer
@@ -217,7 +281,7 @@ function CartItemCard({cartItem, setReRender}: {
                                         Buy &nbsp;
                                         { offerObj[el].itemCount }    
                                         &nbsp;
-                                        <br></br>
+                                        GET &nbsp;
                                         { `+${offerObj[el]["itemOffered"].quantity}` } &nbsp;
                                         {
                                             offerObj[el]["itemOffered"].name == el ? "More" : offerObj[el]["itemOffered"].name
