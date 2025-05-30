@@ -5,7 +5,7 @@ import type { cartCardItems } from "../../types/interfaces/items";
 import { AddIcon, MinusIcon, RemoveIcon } from "../icons/cartFunc";
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
 
-import {useState} from "react"
+import {useState, useEffect} from "react"
 
 function CartItemCard({cartItem, setReRender}: {
     cartItem : CartObjType,
@@ -15,7 +15,9 @@ function CartItemCard({cartItem, setReRender}: {
     const invObj = JSON.parse(localStorage.getItem("Inventory") as string);
     const allItems = useRecoilValue(cartCardSelector);
     const setCartCount = useSetRecoilState(cartCountAtom);
+    const cartCount = useRecoilValue(cartCountAtom);
     const [itemAvailability, setItemAvailability] = useState(0);
+    const [total, setTotal] = useState(0);
 
     function addToCART(elm : cartCardItems){
         // update cartCountAtom
@@ -108,13 +110,28 @@ function CartItemCard({cartItem, setReRender}: {
         setReRender(t=>!t);
     }
 
+    function SetTOTAL(){
+        setTotal(0);
+        const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
+        Object.keys(cartObj.items).map((el:string) => {
+            const element = allItems.find(e=>e.name == el) as cartCardItems;
+            const total = (parseFloat((element.price).split("£")[1])*cartItem.items[el]);
+            setTotal(t => t+total);
+        })
+    }
+
+    useEffect(function(){
+        SetTOTAL();
+    },[cartCount])
+
     return (
+        <>
         <div className="flex flex-col gap-8">
             {/* Content Extraction */}
             {
                 Object.keys(cartItem.items).map((el:string,i:number)=>{
                     const element = allItems.find(e => e.name == el) as cartCardItems;
-                    // const pr = (parseFloat((element.price).split("£")[1])*cartItem.items[el]).toFixed(2);
+                    // const pr = (parseInt((element.price).split("£")[1])*cartItem.items[el]);
                     // console.log(pr);
                     // setItemAvailability(invObj[el]);    //it trigerrs inifinite renders 
                     return (
@@ -180,7 +197,40 @@ function CartItemCard({cartItem, setReRender}: {
                     )
                 })
             }
-        </div>    
+        </div>  
+
+        <div className="mt-10 flex flex-col justify-center w-[70%]">
+            <div className="flex flex-col gap-8">
+                <hr></hr>
+                <div className="flex w-[70%] justify-end items-center font-bold text-xl gap-16 self-end">
+                    <p className="w-[15%] text-right  mr-20">Subtotal</p>
+                    <p className="text-gray-icon_light w-[10%]">£{total.toFixed(2)}</p>
+                    <button className="active:scale-90 bg-white-default text-white-default px-6 py-2 rounded-md" disabled={true}>
+                        Checkout
+                    </button>
+                </div>
+                <hr></hr>
+                <div className="flex w-[70%] justify-end items-center font-bold text-xl  gap-16 self-end"> 
+                    <p className=" w-[15%] text-right mr-20">Discount</p>
+                    <p className="text-gray-icon_light w-[10%]">£0.00</p>
+                    <button className="active:scale-90 bg-white-default text-white-default px-6 py-2 rounded-md" disabled={true}>
+                        Checkout
+                    </button>
+                </div>  
+                <hr></hr>
+                <div className="flex w-[70%] justify-end items-center font-bold text-xl gap-16 self-end">
+                    <p className=" w-[15%] text-right mr-20">Total</p>
+                    <p className="text-gray-icon_light w-[10%]">£{total.toFixed(2)}</p>
+                    <button className="hover:cursor-pointer active:scale-90 bg-green-button text-white-default px-6 py-2 rounded-md">
+                        Checkout
+                    </button>
+                </div>
+                <hr></hr>
+            </div>
+        </div>
+
+    
+        </>  
     )
 }
 
