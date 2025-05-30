@@ -2,6 +2,7 @@
 
 A modern, performant web app built using **Vite**, **React**, and **TypeScript**, featuring **TailwindCSS** for styling and **Recoil** for state management. This project includes custom UI components, icon components, modular layouts, and structured data flow using atoms and selectors.
 
+Access Word Doc : https://docs.google.com/document/d/1FrjUU6tGGVSOC1c2TxsGLFSF0vQpqSsA/edit?usp=sharing&ouid=101299884467098919425&rtpof=true&sd=true
 ---
 
 ## 🚀 Tech Stack
