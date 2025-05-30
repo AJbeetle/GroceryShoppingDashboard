@@ -3,6 +3,7 @@ import CartIcon from "../icons/cart";
 import LikeIcon from "../icons/like";
 import SliderIcon from "../icons/slider";
 import UserIcon from "../icons/user";
+import type { apiItems, cardItems } from "../../types/interfaces/items"
 
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
 import { likedCountAtom } from "../../store/atoms and selectors/like";
@@ -11,24 +12,27 @@ import {useRecoilValue} from "recoil"
 
 import {Link, useNavigate} from "react-router-dom"
 
-function TopBar(){
+function TopBar({setView}:{setView:React.Dispatch<React.SetStateAction<cardItems[] | apiItems[] | undefined>>}){
 
     const likeElem = useRecoilValue(likedCountAtom);
     const cartElem = useRecoilValue(cartCountAtom);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
      
     return (
         <div className="w-full flex items-center justify-around">
 
-            {/* <p className="font-bold text-2xl hover:cursor-pointer active:scale-95" onClick={()=>navigate("/dashboard")}>
+            <p className="font-bold text-2xl hover:cursor-pointer active:scale-95" onClick={()=>{
+                navigate("/dashboard"); 
+                setView(undefined); 
+                }}>
                 GROCERIES
-            </p> */}
+            </p>
 
-            <Link to="/dashboard">
-                <p className="font-bold text-2xl hover:cursor-pointer active:scale-95">
+            {/* <Link to="/dashboard">
+                <p className="font-bold text-2xl hover:cursor-pointer active:scale-95" onClick={()=>setView([])}>
                     GROCERIES
                 </p>
-            </Link>
+            </Link> */}
             {/* <SliderIcon className="bg-red-400"></SliderIcon> */}
             <SearchBar size = {"sm"} placeholder="Search" Icon={SliderIcon}></SearchBar>
             <div className="flex w-[15%] justify-around items-center gap-4 ">

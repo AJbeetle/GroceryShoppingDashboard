@@ -63,9 +63,14 @@ function CartItemCard({cartItem, setReRender}: {
         // update localStorage cartObj
         // update localStorag invObj
         // disable add button if inventory goes to 0 after person adding it to cart
-
-
         const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
+
+        if(cartObj.items[elm.name] == 1){
+            removeFromCART(elm);
+            return; 
+        }
+
+        // const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
 
         cartObj.items[elm.name]--;
         cartObj.count--;
@@ -104,7 +109,7 @@ function CartItemCard({cartItem, setReRender}: {
     }
 
     return (
-        <div>
+        <div className="flex flex-col gap-8">
             {/* Content Extraction */}
             {
                 Object.keys(cartItem.items).map((el:string,i:number)=>{
