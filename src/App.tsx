@@ -5,7 +5,7 @@ import './App.css'
 import DesignSheet from './layouts/devDesignSheet'
 import {BrowserRouter, Routes, Route, Link, useNavigate} from "react-router-dom"
 
-import {Like, Cart, Offers, Inventory} from "./store/loaclStorage"
+import {Like, Cart, Offers, Inventory, Free} from "./store/loaclStorage"
 import axios from 'axios'
 import Dashboard from './layouts/Dashboard'
 import CartPage from './layouts/Checkout'
@@ -24,6 +24,7 @@ function App() {
   localStorage.setItem("Offers",JSON.stringify(Offers));
   localStorage.setItem("Like",JSON.stringify(Like));
   localStorage.setItem("Cart",JSON.stringify(Cart));
+  localStorage.setItem("Free",JSON.stringify(Free));
   localStorage.setItem("Inventory",JSON.stringify(Inventory));
 
   useEffect(function(){
@@ -32,6 +33,7 @@ function App() {
       localStorage.setItem("Offers",JSON.stringify(Offers));
       localStorage.setItem("Like",JSON.stringify(Like));
       localStorage.setItem("Cart",JSON.stringify(Cart));
+      localStorage.setItem("Free",JSON.stringify(Free)); //I am assuming whatever Items are offered free, are not part of main inventory a different stock is maintained for them, so whenevr an item is added or removed from Free its quantity will not be reduced/increased from inventory
       localStorage.setItem("Inventory",JSON.stringify(Inventory));
       callDB().then(res=>{
         // const inventoryObj:Record<string, number> = {};

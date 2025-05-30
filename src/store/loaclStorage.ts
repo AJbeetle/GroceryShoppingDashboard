@@ -31,6 +31,14 @@ const Cart:CartObjType= {
     }
 }
 
+//I am assuming whatever Items are offered free, are not part of main inventory a different stock is maintained for them, 
+// so whenevr an item is added or removed from Free its quantity will not be reduced/increased from inventory
+const Free:CartObjType= {
+    "count" : 0,
+    "items" : {
+    }
+}
+
 // const Inventory:Record<string, number> = {
 const Inventory:InvObjType = {
 
@@ -56,5 +64,5 @@ const Offers:OffersType = {
 
 
 export {
-    Like, Cart, Offers, Inventory
+    Like, Cart, Offers, Inventory, Free
 }
