@@ -1,19 +1,19 @@
-import {useRecoilValue, useSetRecoilState} from "recoil"
-import { allItemAtom, cardItemsSelector, trendingItemSelector, fruitSelector, drinkSelector, bakerySelector, searchItemsSelector } from "../store/atoms and selectors/items"
+import {useRecoilValue} from "recoil"
+import { cardItemsSelector, fruitSelector, drinkSelector, bakerySelector, searchItemsSelector } from "../store/atoms and selectors/items"
 import type { apiItems, cardItems } from "../types/interfaces/items";
 import ItemCard from "../components/ui/itemCard";
 import { cartCountAtom } from "../store/atoms and selectors/cart";
 import TopBar from "../components/ui/topBar";
-import { PiSlidersHorizontalFill } from "react-icons/pi";
-import {useRef, useState, useEffect} from "react"
-import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
+// import { PiSlidersHorizontalFill } from "react-icons/pi";
+import {useState} from "react"
+// import type { LikeObjType, InvObjType, CartObjType } from "../store/loaclStorage";
 import CartItemCard from "../components/ui/cartCard";
 import BackToTopButton from "../components/ui/takeToTop";
 
 function DesignSheet(){
     const [item, setItem ] = useState(false); //this is just a state atom to be triggered in order to re render this design page : if something is added to cart, or liked from user in search panel
     const items:cardItems[] = useRecoilValue(cardItemsSelector);
-    const trendy:apiItems[] = useRecoilValue(trendingItemSelector);
+    // const trendy:apiItems[] = useRecoilValue(trendingItemSelector);
     const fruits:apiItems[] = useRecoilValue(fruitSelector);
     const drinks:apiItems[] = useRecoilValue(drinkSelector);
     const bakery:apiItems[] = useRecoilValue(bakerySelector);
@@ -22,26 +22,30 @@ function DesignSheet(){
     const [cartReRender, setCartReRender] = useState(false);
 
     // const [view, setView] : [cardItems[] | apiItems[], React.Dispatch<React.SetStateAction<undefined>> | any] = useState(items);
-    const [view, setView] = useState<cardItems[] | apiItems[]>(items);
+    const [view, setView] = useState<cardItems[] | apiItems[] | undefined>(items);
     // let LikeObject:Record<string,number|Record<string, boolean>>, InvObj:Record<string, number>, CartObj:Record<string,number|Record<string, number>>;
 
     let LikeObject = JSON.parse(localStorage.getItem("Like") as string);
     let InvObj = JSON.parse(localStorage.getItem("Inventory") as string);
     let CartObj = JSON.parse(localStorage.getItem("Cart") as string);
-    let offerObj = JSON.parse(localStorage.getItem("Offers") as string);
+    // let offerObj = JSON.parse(localStorage.getItem("Offers") as string);
 
 
 
     function changeView(viewName:apiItems[] | cardItems[]){
         setView(viewName);
-        // console.log(view);
+        console.log(view);
+        console.log(cartItemsCount);
+        console.log(cartReRender);
+        console.log(item);
+        
     }
 
     return (
         <div className="flex flex-wrap flex-col ">
             {/* ELEMENT 1 : TOPBAR --------------------------------------------------------------------------------------------- */}
             <div className="w-full left-0 bg-white-default h-[100px] flex justify-center items-center">
-                <TopBar/>   
+                <TopBar setView={setView}/>   
             </div>  
 
 
@@ -61,7 +65,7 @@ function DesignSheet(){
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
                                 const likeState = (LikeObject.items[el.name]===true) ? true : false;
                                 const invCount = InvObj[el.name]
-
+                                console.log(i);
                                 return (
                                         //@ts-ignore
                                         <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
@@ -92,11 +96,12 @@ function DesignSheet(){
                     {/* ELEMENT 4 : ITEMS LIST IN FORM OF CARDS --------------------------------------------------------------------------------------------- */}
                     <div className="flex flex-wrap">
                         {
-                            view.map((el:apiItems | cardItems,i:number) => {
+                            view?.map((el:apiItems | cardItems,i:number) => {
                                 //  console.log(el);
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
                                 const likeState = (LikeObject.items[el.name]===true) ? true : false;
                                 const invCount = InvObj[el.name]
+                                console.log(i);
 
                                 // console.log(`${CartObj.items[el.name]} : ${cartAvail}`);
                                 // console.log(`${LikeObject.items[el.name]} : ${likeState}`);

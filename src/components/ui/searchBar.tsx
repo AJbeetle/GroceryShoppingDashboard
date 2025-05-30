@@ -1,4 +1,3 @@
-import type { ReactElement, ReactNode} from "react"
 import {useState, useEffect} from "react"
 import { searchResultAtom } from "../../store/atoms and selectors/items";
 import { useSetRecoilState } from "recoil";

@@ -2,11 +2,11 @@ import type { cardItems } from "../../types/interfaces/items"
 import type { apiItems } from "../../types/interfaces/items"
 import CartIcon from "../icons/cart"
 import LikeIcon from "../icons/like"
-import {useState, useRef} from "react";
+import {useState} from "react";
 import {useSetRecoilState} from "recoil"
 import { cartCountAtom } from "../../store/atoms and selectors/cart";
 import { likedCountAtom } from "../../store/atoms and selectors/like";
-import type { OffersType } from "../../store/loaclStorage";
+// import type { OffersType } from "../../store/loaclStorage";
 
 
 function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtraRender} : {

@@ -1,4 +1,4 @@
-import {atom, useRecoilState, selector} from "recoil"
+import {atom,  selector} from "recoil"
 import axios from "axios"
 import type { apiItems, cardItems } from "../../types/interfaces/items";
 
@@ -8,7 +8,7 @@ const allItemAtom = atom ({
     key : "itemDetails",
     default : selector({
         key : "itemDetailSelector",
-        get : async function({get}){
+        get : async function({}){
             const res = await axios.get(`${BASE_URL}/?category=all`);
             return res.data;
         }
