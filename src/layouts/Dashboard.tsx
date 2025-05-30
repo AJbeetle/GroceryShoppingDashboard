@@ -32,7 +32,7 @@ function Dashboard(){
     const likes:apiItems[] = useRecoilValue(likedElementSelector) as apiItems[];
 
     // const [view, setView] : [cardItems[] | apiItems[], React.Dispatch<React.SetStateAction<undefined>> | any] = useState(items);
-    const [view, setView] = useState<cardItems[] | apiItems[]>(items);
+    const [view, setView] = useState<cardItems[] | apiItems[] | undefined>(undefined);
     // let LikeObject:Record<string,number|Record<string, boolean>>, InvObj:Record<string, number>, CartObj:Record<string,number|Record<string, number>>;
 
     let LikeObject = JSON.parse(localStorage.getItem("Like") as string);
@@ -47,15 +47,17 @@ function Dashboard(){
         // console.log(view);
     }
 
+
     return (
         <div className="flex flex-wrap flex-col ">
             {/* ELEMENT 1 : TOPBAR --------------------------------------------------------------------------------------------- */}
-            <div className="w-full left-0 bg-white-default h-[100px] flex justify-center items-center">
-                <TopBar/>   
+            <div className="w-full left-0 bg-white-default h-[100px] flex justify-center items-center ">
+                <TopBar setView={setView}/>   
             </div>  
-
+            
+            <div className="flec flex-wrap flex-col px-6">
             {/* ELEMENT 2 : SEARCH_RESULTS --------------------------------------------------------------------------------------------- */}
-            <p className="text-xs font-bold m-4 w-[100%]">SEARCH RESULTS WILL APPEAR HERE ...</p>
+            <p className="text-xs font-bold m-4 w-[100%]"></p>
             {
                 searchs.length>0 ? 
                 <div id="searchDiv" className="flex flex-wrap flex-col justify-center p-2 items-start w-[100%]"> 
@@ -94,8 +96,10 @@ function Dashboard(){
                     </div>
 
                     {/* ELEMENT 4 : ITEMS LIST IN FORM OF CARDS --------------------------------------------------------------------------------------------- */}
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap w-full">
                         {
+                            view!=null ? 
+                            
                             view.map((el:apiItems | cardItems,i:number) => {
                                 //  console.log(el);
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
@@ -106,62 +110,34 @@ function Dashboard(){
                                         //@ts-ignore
                                         <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount}></ItemCard>
                                 )
-                            })
-                        }
-                    </div>
-                </div>
-            }
+                            }) 
+                            :
+                            <div className="flex flex-col w-full"> 
+                            
+                            <p className="mt-10 text-xl font-bold p-2">TRENDING ITEM</p>
+                            <div className="flex w-full flex-wrap">
 
-            {/* EXTRA ADD ON in UI : Side Panel for Recommended Items (for this the divs with id : searchDiv and itemsDiv their w-[80%]): Will Try after submission  */}
-
-            {/* ELEMENT 5 : User Liked Items are shown as Recommended for you  */}
-            {/* { 
-                <div>
-                <p className="text-xl font-bold m-4 w-[100%]">Recommended for you...</p>
-                <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start overflow-scroll scrollbar-x-hidden  p-6 rounded-lg bg-neutral-200"> 
-                    <div className="flex overflow-hidden justify-center items-center gap-6 m-6"> 
-                        {
-                            likes.map((el:apiItems | cardItems,i:number) => {
+                            {trendy.map((el:apiItems | cardItems,i:number) => {
                                 const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
                                 const likeState = (LikeObject.items[el.name]===true) ? true : false;
                                 const invCount = InvObj[el.name]
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                     )
-                            })  
-                        }
-                    </div>
-                </div>
-                </div>
-            } */}
+                            }) 
+                            }
 
-            <hr className="mt-10"></hr>
-            {/* ELEMENT 6 : Trending Items => Scroballe single column UI */}
-            {
-                view==items &&  
-                <>
-                <p className="text-xl font-bold m-10 w-[100%]">TRENDY ITEMS ...</p>
-                <div className="flex flex-wrap flex-col w-[100%] justify-center p-2 items-start overflow-scroll scrollbar-x-hidden  p-6 rounded-lg bg-neutral-200"> 
-                    <div className="flex overflow-hidden justify-center items-center gap-6 m-6"> 
-                        {
-                            trendy.map((el:apiItems | cardItems,i:number) => {
-                                const cartAvail = (CartObj.items[el.name]==0 || CartObj.items[el.name]==undefined) ? false : true;
-                                const likeState = (LikeObject.items[el.name]===true) ? true : false;
-                                const invCount = InvObj[el.name]
-                                return (
-                                        //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
-                                    )
-                            })  
+                            </div>
+                            </div>   
                         }
                     </div>
                 </div>
-                </>
             }
             
             {/* ELEMENT 7 : Back To Top Button */}
             <BackToTopButton/>
+            </div>
         </div>
     )
 }
