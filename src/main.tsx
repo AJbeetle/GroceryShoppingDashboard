@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-  <BrowserRouter>
+  <BrowserRouter basename="/">
     <RecoilRoot>
       <div className="font-almarai text-black-text bg-white-default">
         <App />

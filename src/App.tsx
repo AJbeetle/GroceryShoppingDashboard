@@ -20,7 +20,7 @@ function App() {
     const data = await res.data;
     return data;
   }
-  localStorage.clear();
+  
   localStorage.setItem("Offers",JSON.stringify(Offers));
   localStorage.setItem("Like",JSON.stringify(Like));
   localStorage.setItem("Cart",JSON.stringify(Cart));
@@ -30,6 +30,7 @@ function App() {
   useEffect(function(){
     console.log("Setting localStorage");
     try{
+      localStorage.clear();
       localStorage.setItem("Offers",JSON.stringify(Offers));
       localStorage.setItem("Like",JSON.stringify(Like));
       localStorage.setItem("Cart",JSON.stringify(Cart));
@@ -55,9 +56,9 @@ function App() {
       console.log(E);
     }
 
-    return function(){
-      localStorage.clear();
-    }
+    // return function(){
+    //   localStorage.clear();
+    // }
   },[])
 
   return (
