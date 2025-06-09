@@ -1,4 +1,4 @@
-// import axios from "axios"
+import axios from "axios"
 
 export type LikeObjType = {
     count : number,
@@ -81,18 +81,28 @@ const Inventory:InvObjType = {
 //     console.log("error : "+e.message)
 // })
 
-// function getInventory(){
-//     let inventory = {}
-//     axios.get(import.meta.env.BACKEND_INVENTORY).then((res)=>{
-//         inventory = res.data.inventory;
-//     }).catch(e => {
-//         console.log("error : "+e);
-//     })
-//     return inventory
-// }
+function getInventoryDetailsForSearch(){
+    let inventory:Array<Object> = []
+    let invDetails:Record<string, string> = {}
+    axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/?category=all`).then((res)=>{
+        inventory = res.data;
 
-// let Inventory:InvObjType = getInventory()
-// console.log(Inventory);
+        inventory.forEach((e:any)=>{
+            invDetails[e.name] = e.description 
+        })
+
+        console.log(invDetails)
+        return invDetails;
+    }).catch(e => {
+        console.log("error : "+e);
+        return invDetails;
+    })
+    
+    return invDetails;
+}
+
+const InvDetails:Record<string,string> = getInventoryDetailsForSearch()
+console.log(InvDetails);
 
 
 const Offers:OffersType = {
@@ -114,5 +124,5 @@ const Offers:OffersType = {
 
 
 export {
-    Like, Cart, Offers, Inventory, Free
+    Like, Cart, Offers, Inventory, Free, InvDetails
 }
