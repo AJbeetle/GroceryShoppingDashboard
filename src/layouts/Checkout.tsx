@@ -75,7 +75,7 @@ function CartPage(){
             }
             
             {/* ELEMENT 5 : ITEMS LIST IN FORM OF CARDS --------------------------------------------------------------------------------------------- */}
-            <p className="font-bold text-3xl mb-20 p-8">CHECKOUT</p>
+            <p className="font-bold text-2xl mb-20 p-8">CHECKOUT</p>
             <div className="mt-4 px-2 py-4">
                 <CartItemCard cartItem={CartObj} setReRender={setCartReRender}/>
             </div>
