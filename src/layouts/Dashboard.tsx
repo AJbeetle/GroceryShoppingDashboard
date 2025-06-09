@@ -71,7 +71,7 @@ function Dashboard(){
 
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartCount={CartObj.items[el.name]} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                     )
 
                             
@@ -109,7 +109,7 @@ function Dashboard(){
 
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartCount={CartObj.items[el.name]} cartState={cartAvail} key={el.id || el.name || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                 )
                             }) 
                             :
@@ -124,7 +124,7 @@ function Dashboard(){
                                 const invCount = InvObj[el.name]
                                 return (
                                         //@ts-ignore
-                                        <ItemCard item={el} likeState={likeState} cartState={cartAvail} key={el.id || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
+                                        <ItemCard item={el} likeState={likeState} cartCount={CartObj.items[el.name]} cartState={cartAvail} key={el.id || i} userSessionItemAvailable={invCount} setExtraRender={setItem}></ItemCard>
                                     )
                             }) 
                             }
