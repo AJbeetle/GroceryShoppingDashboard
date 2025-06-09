@@ -313,7 +313,7 @@ function CartItemCard({cartItem, setReRender}: {
                         offer = true;
                     }
                     else{
-                        false;
+                        offer = false;
                     }
                     return (
                         <div className="w-[100%] flex gap-10">
