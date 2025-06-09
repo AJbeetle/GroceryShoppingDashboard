@@ -37,7 +37,9 @@ function TopBar({setView}:{setView:React.Dispatch<React.SetStateAction<cardItems
             <SearchBar size = {"sm"} placeholder="Search" Icon={SliderIcon}></SearchBar>
             <div className="flex w-[15%] justify-around items-center gap-4 ">
                 <div className="flex relative">
-                    <LikeIcon state={true} style={`text-[46px] hover:cursor-pointer active:scale-95`}></LikeIcon>
+                    <Link to="/likes">
+                        <LikeIcon state={true} style={`text-[46px] hover:cursor-pointer active:scale-95`}></LikeIcon>
+                    </Link>
                     {
                         likeElem > 0 ? 
                         <div className="flex justify-center items-center text-xs absolute -right-4 -top-3 bg-pink-notify text-white-default w-5 h-5 rounded-full">

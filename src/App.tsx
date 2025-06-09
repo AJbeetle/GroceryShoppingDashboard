@@ -10,6 +10,7 @@ import axios from 'axios'
 import Dashboard from './layouts/Dashboard'
 import CartPage from './layouts/Checkout'
 import ErrorPage from './layouts/ErrorPage'
+import LikePage from "./layouts/Liked"
 
 const BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
@@ -74,6 +75,7 @@ function App() {
           <Route path="/" element={<Dashboard></Dashboard>}></Route>
           <Route path="/dashboard" element={<Dashboard></Dashboard>}></Route>
           <Route path="/cart" element={<CartPage></CartPage>}></Route>
+          <Route path="/likes" element={<LikePage></LikePage>}></Route>
           <Route path="*" element={<ErrorPage></ErrorPage>}></Route>
       </Routes>
     </div>
