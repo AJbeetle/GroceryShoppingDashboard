@@ -5,7 +5,7 @@ import App from './App.tsx'
 import {RecoilRoot} from "recoil"
 import { BrowserRouter } from 'react-router-dom'
 
-import {Like, Cart, Offers, Inventory, Free} from "./store/loaclStorage"
+import {Like, Cart, Offers, Inventory, Free, InvDetails} from "./store/loaclStorage"
 
 if(!localStorage.getItem("Initialised")){
   localStorage.setItem("Offers",JSON.stringify(Offers));
@@ -13,6 +13,7 @@ if(!localStorage.getItem("Initialised")){
   localStorage.setItem("Cart",JSON.stringify(Cart));
   localStorage.setItem("Free",JSON.stringify(Free));
   localStorage.setItem("Inventory",JSON.stringify(Inventory));
+  localStorage.setItem("InvDetails",JSON.stringify(InvDetails));
 }
 
 createRoot(document.getElementById('root')!).render(
