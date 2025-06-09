@@ -166,9 +166,18 @@ function ItemCard({item, likeState, userSessionItemAvailable, cartState, setExtr
                             {item.price}
                         </div>
                         <div className="flex justify-center items-center gap-4">
-                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" disabled={itemAvailability==0?true:false} onClick={()=>addtoCart()} >
-                                <CartIcon fill={stateOfCart} style={`w-[28px] h-[27px]`}/>
-                            </button>
+                            <div className="flex">
+                                <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" disabled={itemAvailability==0?true:false} onClick={()=>addtoCart()} >
+                                    <CartIcon fill={stateOfCart} style={`w-[28px] h-[27px]`}/>
+                                </button>
+                                {
+                                    stateOfCart && 
+                                    <div>
+                                        + &nbsp; Number &nbsp; -
+                                    </div>
+                                    
+                                }
+                            </div>
                             <button className="" onClick={()=>toggleLike()}>
                                  <LikeIcon style="text-3xl" state={stateOfLike}/>
                             </button>

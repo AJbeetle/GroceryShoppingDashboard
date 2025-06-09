@@ -21,12 +21,14 @@ function CartItemCard({cartItem, setReRender}: {
     const cartCount = useRecoilValue(cartCountAtom);
     const [itemAvailability, setItemAvailability] = useState(0);
     const [total, setTotal] = useState(0);
+    const [discount, setDiscount] = useState(0);
     // const freeItems = useRecoilValue(freeItemsInCartCardSelector) as cartCardItems[];
     // console.log("free Items Selector : ",freeItems);
     const freeElemAtom = useRecoilValue(freeElementsAtom);
     console.log("free Atom  : ",freeElemAtom)
     console.log(itemAvailability);
 
+    const [freeObj, setFreeObj] = useState<CartObjType>(JSON.parse(localStorage.getItem("Free") as string));
 
     function addToCART(elm : cartCardItems, offer:boolean){
         // update cartCountAtom
@@ -153,7 +155,8 @@ function CartItemCard({cartItem, setReRender}: {
             }
             else{
                 if(freeObj.items[itemOffered]>0){
-                    freeObj.items[itemOffered]=freeObj.items[itemOffered] - 1;
+                    // freeObj.items[itemOffered]=freeObj.items[itemOffered] - 1;
+                    freeObj.items[itemOffered]=(Math.floor(cartObj.items[elm.name]/multiple))*itemCount;
                     localStorage.setItem("Free",JSON.stringify(freeObj));
                 }
             }
@@ -192,19 +195,48 @@ function CartItemCard({cartItem, setReRender}: {
         setReRender(t=>!t);
     }
 
+
     function SetTOTAL(){
         setTotal(0);
         const cartObj = JSON.parse(localStorage.getItem("Cart") as string);
+        const freeObj = JSON.parse(localStorage.getItem("Free") as string);
         Object.keys(cartObj.items).map((el:string) => {
             const element = allItems.find(e=>e.name == el) as cartCardItems;
             const total = (parseFloat((element.price).split("£")[1])*cartItem.items[el]);
             setTotal(t => t+total);
         })
+
+        Object.keys(freeObj.items).map((el:string) => {
+            const element = allItems.find(e => e.name == el) as cartCardItems;
+            const tot = parseFloat((element.price).split("£")[1])*freeObj.items[el];
+            setTotal(t=>t+tot);
+        })
     }
 
+    function SetDISCOUNT(){
+        setDiscount(0);
+        const freeObj = JSON.parse(localStorage.getItem("Free") as string);
+        Object.keys(freeObj.items).map((el:string) => {
+            const element = allItems.find(e => e.name == el) as cartCardItems;
+            const tot = parseFloat((element.price).split("£")[1])*freeObj.items[el];
+            setDiscount(t=>t+tot);
+        })
+
+    }
     useEffect(function(){
         SetTOTAL();
+        SetDISCOUNT();
     },[cartCount])
+
+    useEffect(function(){
+        function getFreeObj(){
+            const freeOb = JSON.parse(localStorage.getItem("Free") as string)
+            setFreeObj(freeOb);
+        }
+
+        setInterval(getFreeObj,500);
+
+    },[])
 
     // useEffect(function(){
     //     console.log("free Atom  : ",freeElemAtom)
@@ -212,23 +244,57 @@ function CartItemCard({cartItem, setReRender}: {
 
     return (
         <>
-        <div className="flex flex-col gap-8 bg-gray-100 p-10 rounded-xl">
-            <p className="ml-10 text-gray-icon_dark font-bold">FREE ITEMS ADDED ..</p>
-            <div>
-                {/* {
-                    freeItems[0].name 
-                } */}
-                {/* {
-                    freeItems?.map((el, i) => {
-                        return(
-                            <div>
-                                {
-                                    el.count
-                                }
+        <div className="flex flex-col gap-8 bg-gray-100 p-4 rounded-xl">
+            <p className="ml-6 text-gray-icon_dark font-bold">FREE ITEMS ADDED ..</p>
+            <div className="flex flex-col gap-4">
+                {
+                    //@ts-ignore
+                    Object.keys(freeObj?.items).map((el => {
+                        const element = allItems.find(e => e.name == el) as cartCardItems;
+                        if(freeObj.items[el]==0){
+                            return null
+                        }
+                        return (
+                        <div className="flex m-1 bg-white-default shadow-lg p-6 rounded-3xl w-[70%] justify-between" key={el}>
+                            {/* Image and Name */}
+                            <div className="flex w-[40%] gap-6 ">
+                                <div>
+                                    <img src={`${element.img}`} className="w-[80px] h-[80px] rounded-lg"></img>
+                                </div>
+                                <div className="flex flex-col gap-4">
+                                    <p className="font-bold text-xl">{element.name}</p>
+                                    <p>Product Code : {`P${element.id}`}</p>
+                                </div>
                             </div>
+
+                            {/* Other Functionalities */}
+                            <div className="flex justify-between w-[60%]  items-start">
+                                <div className="flex flex-col w-full gap-2">
+                                    <div className="flex justify-center items-center w-full ">
+                                        <div className="flex gap-4 w-[70%] justify-center">
+                                            <p className="text-xl">
+                                                {
+                                                    freeObj.items[el]
+                                                }
+                                            </p>
+                                        </div>
+
+                                        <div className="flex justify-end items-center  gap-14 w-[30%]  ">
+                                            <div className="line-through">
+                                                £{(parseFloat((element.price).split("£")[1])*freeObj.items[el]).toFixed(2)}
+                                            </div> 
+                                            <div>
+                                                £{(parseFloat((element.price).split("£")[1])*0).toFixed(2)}
+                                            </div> 
+                                        </div>   
+                                    </div>                                       
+                                </div>
+
+                            </div>
+                        </div>
                         )
-                    })
-                } */}
+                    }))
+                }
             </div>  
         </div>
 
@@ -268,7 +334,7 @@ function CartItemCard({cartItem, setReRender}: {
                                 <div className="flex flex-col w-full gap-2">
                                     <div className="flex justify-center items-center w-full ">
                                         <div className="flex gap-4 w-[70%] justify-center">
-                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>minusFromCART(element, offer)} disabled={cartObj.items[el]===0?true:false}>
+                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed rounded-lg" onClick={()=>minusFromCART(element, offer)} disabled={cartObj.items[el]===0?true:false}>
                                                 <MinusIcon/>
                                             </button>
                                             <p className="text-xl">
@@ -276,7 +342,7 @@ function CartItemCard({cartItem, setReRender}: {
                                                     cartItem.items[el]
                                                 }
                                             </p>
-                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>addToCART(element, offer)} disabled={invObj[el]===0?true:false}> 
+                                            <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed rounded-lg" onClick={()=>addToCART(element, offer)} disabled={invObj[el]===0?true:false}> 
                                                 <AddIcon/>
                                             </button>
                                         </div>
@@ -284,10 +350,11 @@ function CartItemCard({cartItem, setReRender}: {
                                         <div className="flex justify-end items-center  gap-14 w-[30%]  ">
                                             <div>
                                                 £{(parseFloat((element.price).split("£")[1])*cartItem.items[el]).toFixed(2)}
+                                                {/* £{(parseFloat((element.price).split("£")[1])).toFixed(2)} */}
                                             </div>
 
                                             <div className="justify-center items-center flex">
-                                                <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed" onClick={()=>removeFromCART(element, offer)} disabled={false}>
+                                                <button className="active:scale-90 disabled:scale-100 disabled:cursor-not-allowed rounded-lg" onClick={()=>removeFromCART(element, offer)} disabled={false}>
                                                     <RemoveIcon/>
                                                 </button>
                                             </div>   
@@ -354,7 +421,7 @@ function CartItemCard({cartItem, setReRender}: {
                 <hr></hr>
                 <div className="flex w-[70%] justify-end items-center font-bold text-xl  gap-16 self-end"> 
                     <p className=" w-[15%] text-right mr-20">Discount</p>
-                    <p className="text-gray-icon_light w-[10%]">£0.00</p>
+                    <p className="text-gray-icon_light w-[10%]">£{discount.toFixed(2)}</p>
                     <button className="active:scale-90 bg-white-default text-white-default px-6 py-2 rounded-md" disabled={true}>
                         Checkout
                     </button>
@@ -362,7 +429,7 @@ function CartItemCard({cartItem, setReRender}: {
                 <hr></hr>
                 <div className="flex w-[70%] justify-end items-center font-bold text-xl gap-16 self-end">
                     <p className=" w-[15%] text-right mr-20">Total</p>
-                    <p className="text-gray-icon_light w-[10%]">£{total.toFixed(2)}</p>
+                    <p className="text-gray-icon_light w-[10%]">£{(total-discount).toFixed(2)}</p>
                     <button className="hover:cursor-pointer active:scale-90 bg-green-button text-white-default px-6 py-2 rounded-md">
                         Checkout
                     </button>
