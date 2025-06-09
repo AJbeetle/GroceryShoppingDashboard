@@ -19,9 +19,9 @@ function TopBar({setView}:{setView:React.Dispatch<React.SetStateAction<cardItems
     const navigate = useNavigate();
      
     return (
-        <div className="w-full flex items-center justify-around">
+        <div className="w-full flex items-start justify-around">
 
-            <p className="font-bold text-2xl hover:cursor-pointer active:scale-95" onClick={()=>{
+            <p className="font-bold text-3xl hover:cursor-pointer active:scale-95" onClick={()=>{
                 navigate("/dashboard"); 
                 setView(undefined); 
                 }}>
